@@ -47,7 +47,6 @@ export class PostagemService {
         })
     }
 
-
     async create(postagem: Postagem): Promise<Postagem> {
         await this.temaService.findById(postagem.tema.id);
         return await this.postagemRepository.save(postagem);
