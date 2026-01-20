@@ -4,6 +4,7 @@ import { Postagem } from './postagem/entities/postagem.entity';
 import { PostagemModule } from './postagem/postagem.module';
 import { TemaModule } from './tema/tema.module';
 import { Tema } from './tema/entities/tema.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { Tema } from './tema/entities/tema.entity';
       // logging: true, //aparece log sql do typeorm no terminal
     }),
     PostagemModule, //modulos que eu criei
-    TemaModule
+    TemaModule,
+    AuthModule
   ],
   controllers: [],
   providers: [],
