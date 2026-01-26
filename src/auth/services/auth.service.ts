@@ -20,10 +20,10 @@ export class AuthService {
         if(!buscaUsuario)
             throw new HttpException('Usuário não encontrado!', HttpStatus.NOT_FOUND)
 
-        const matchPassword = await this.bcrypt.comparePasswords(password, buscaUsuario.password)
+        const matchPassword = await this.bcrypt.comparePasswords(password, buscaUsuario.senha)
 
         if(buscaUsuario && matchPassword){
-            const { password, ...resposta } = buscaUsuario
+            const { senha: password, ...resposta } = buscaUsuario
             return resposta
         }
 
@@ -40,7 +40,7 @@ export class AuthService {
             nome: buscaUsuario?.nome,
             usuario: usuarioLogin.user,
             senha: '',
-            foto: buscaUsuario?.photo,
+            foto: buscaUsuario?.foto,
             token: `Bearer ${this.jwtService.sign(payload)}`,
         }
     }

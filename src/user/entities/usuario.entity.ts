@@ -1,9 +1,9 @@
-import { IsEmail, IsNotEmpty } from "class-validator";
+import { IsEmail, IsNotEmpty, MinLength } from "class-validator";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Postagem } from "../../postagem/entities/postagem.entity";
 
-@Entity({ name: 'tb_users' })
-export class User {
+@Entity({ name: 'tb_usuarios' })
+export class Usuario {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -17,11 +17,12 @@ export class User {
     @IsEmail()
     email: string;
 
+    @MinLength(8)
     @Column({ length: 255, nullable: false })
-    password: string;
+    senha: string;
 
     @Column({ length: 5000 })
-    photo: string;
+    foto: string;
 
     @OneToMany(() => Postagem, (postagem) => postagem.user)
     postagens: Postagem[];

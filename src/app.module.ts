@@ -6,7 +6,7 @@ import { TemaModule } from './tema/tema.module';
 import { Tema } from './tema/entities/tema.entity';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { User } from './user/entities/user.entity';
+import { Usuario } from './user/entities/usuario.entity';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { User } from './user/entities/user.entity';
       username: 'root', //login do banco de dados (mariadb)
       password: 'root', //senha do banco de dados (mariadb)
       database: 'db_blogpessoal', //nome do database
-      entities: [Postagem, Tema, User], //entidades da api para gerar tabela no db
+      entities: [Postagem, Tema, Usuario], //entidades da api para gerar tabela no db
       synchronize: true, //sincroniza com o banco de dados
       // logging: true, //aparece log sql do typeorm no terminal
     }),

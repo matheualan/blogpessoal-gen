@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { User } from "../entities/user.entity";
+import { Usuario } from "../entities/usuario.entity";
 import { Bcrypt } from "../../auth/bcrypt/bcrypt";
 import { Repository } from "typeorm";
 
@@ -8,12 +8,12 @@ import { Repository } from "typeorm";
 export class UserService {
 
     constructor(
-        @InjectRepository(User)
-        private userRepository: Repository<User>,
+        @InjectRepository(Usuario)
+        private userRepository: Repository<Usuario>,
         private bcrypt: Bcrypt
     ) { }
 
-    async findByUser(email: string): Promise<User | null> {
+    async findByUser(email: string): Promise<Usuario | null> {
         return await this.userRepository.findOne({
             where: {
                 email: email
@@ -21,11 +21,11 @@ export class UserService {
         })
     }
 
-    async findAll(): Promise<User[]> {
+    async findAll(): Promise<Usuario[]> {
         return await this.userRepository.find();
     }
 
-    async findById(id: number): Promise<User> {
+    async findById(id: number): Promise<Usuario> {
         const usuario = await this.userRepository.findOne({
             where: {
                 id: id
@@ -37,23 +37,23 @@ export class UserService {
         return usuario;
     }
 
-    async create(user: User): Promise<User> {
+    async create(user: Usuario): Promise<Usuario> {
         const buscaUsuario = await this.findByUser(user.email);
 
         if (buscaUsuario) throw new HttpException("O Usuario já existe!", HttpStatus.BAD_REQUEST);
 
-        user.password = await this.bcrypt.encryptPassword(user.password)
+        user.senha = await this.bcrypt.encryptPassword(user.senha)
         return await this.userRepository.save(user);
     }
 
-    async update(user: User): Promise<User> {
+    async update(user: Usuario): Promise<Usuario> {
         await this.findById(user.id);
 
-        const buscaUsuario = await this.findByUser(user.password);
+        const buscaUsuario = await this.findByUser(user.senha);
 
         if (buscaUsuario && buscaUsuario.id !== user.id) throw new HttpException('Usuário (e-mail) já Cadastrado!', HttpStatus.BAD_REQUEST);
 
-        user.password = await this.bcrypt.encryptPassword(user.password)
+        user.senha = await this.bcrypt.encryptPassword(user.senha)
         return await this.userRepository.save(user);
     }
 
