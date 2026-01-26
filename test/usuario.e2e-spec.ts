@@ -4,12 +4,12 @@ import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { NOMEM } from 'dns';
-import { emit } from 'process';
 
 //todo arquivo de teste começa com o describe
 describe('Testes dos modulos de usuario e auth', () => {
   let app: INestApplication<App>; //cria app nest para teste
+  let usuarioId: any;
+  let token: any;
 
   //beforeEach ou beforeAll / each = executa uma vez a cada teste it / all = executa uma vez e faz todos os testes
   beforeAll(async () => {
@@ -31,16 +31,10 @@ describe('Testes dos modulos de usuario e auth', () => {
     await app.init();
   });
 
+  //para encerrar os recursos e nao ficar consumindo memoria depois dos testes rodarem
   afterAll(async () => {
     await app.close();
   });
-
-  // it('/ (GET)', () => {
-  //   return request(app.getHttpServer())
-  //     .get('/')
-  //     .expect(200)
-  //     .expect('Hello World!');
-  // });
 
   it('01 - Deve cadastrar um novo usuário', async () => {
     const resp = await request(app.getHttpServer())
@@ -53,11 +47,11 @@ describe('Testes dos modulos de usuario e auth', () => {
       })
       .expect(201);
 
-    // usuarioId = resp.body.id
+    usuarioId = resp.body.id
   });
 
-  it('02 - Não deve cadastrar um novo usuário', async () => {
-    const resp = await request(app.getHttpServer())
+  it('02 - Não deve cadastrar um novo usuário se a senha tiver menos que 8 digitos', async () => {
+    return await request(app.getHttpServer())
       .post('/usuarios/cadastrar')
       .send({
         nome: 'Root',
@@ -66,8 +60,54 @@ describe('Testes dos modulos de usuario e auth', () => {
         foto: '-'
       })
       .expect(400);
+  });
 
-    // usuarioId = resp.body.id
+  it('03 - Não deve cadastrar um novo usuário duplicado', async () => {
+    return await request(app.getHttpServer())
+      .post('/usuarios/cadastrar')
+      .send({
+        nome: 'Root',
+        email: 'root@root.com',
+        senha: 'roootroot',
+        foto: '-'
+      })
+      .expect(400);
+  });
+
+  it('04 - Deve autenticar o usuario (Login)', async () => {
+    const resposta = await request(app.getHttpServer())
+      .post('/usuarios/logar')
+      .send({ //os dados desse objeto veio do metodo 01
+        usuario: 'root@root.com',
+        senha: 'roootroot'
+      })
+      .expect(200);
+
+    token = resposta.body.token;
+  });
+
+  it('05 - Listar todos os usuarios', async () => {
+    return await request(app.getHttpServer())
+      .get('/usuarios/all')
+      .set('Authorization', `${token}`)
+      .expect(200);
+  });
+
+  it('06 - Deve atualizar um usuario', async () => {
+    return request(app.getHttpServer())
+      .put('/usuarios/atualizar')
+      .set('Authorization', `${token}`)
+      .send({
+        id: usuarioId,
+        nome: 'Root atualizado',
+        email: 'root@root.com',
+        senha: 'rootroot',
+        foto: '-'
+      })
+      .expect(200)
+      .then(resposta => {
+        expect('Root atualizado').toEqual(resposta.body.nome);
+      });
   });
 
 });

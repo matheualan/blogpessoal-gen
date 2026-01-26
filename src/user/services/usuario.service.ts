@@ -5,7 +5,7 @@ import { Bcrypt } from "../../auth/bcrypt/bcrypt";
 import { Repository } from "typeorm";
 
 @Injectable()
-export class UserService {
+export class UsuarioService {
 
     constructor(
         @InjectRepository(Usuario)

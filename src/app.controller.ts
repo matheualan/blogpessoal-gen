@@ -9,4 +9,11 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+
+  // @Get()
+  // @ApiExcludeEndpoint()
+  // async redirect (@Res() resposta: any) {
+    // return resposta.redirect('/swagger');
+  // }
+
 }

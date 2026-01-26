@@ -5,7 +5,7 @@ import { PostagemModule } from './postagem/postagem.module';
 import { TemaModule } from './tema/tema.module';
 import { Tema } from './tema/entities/tema.entity';
 import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
+import { UsuarioModule } from './user/usuario.module';
 import { Usuario } from './user/entities/usuario.entity';
 
 @Module({
@@ -24,7 +24,7 @@ import { Usuario } from './user/entities/usuario.entity';
     PostagemModule, //modulos que eu criei
     TemaModule,
     AuthModule,
-    UserModule
+    UsuarioModule
   ],
   controllers: [],
   providers: [],
