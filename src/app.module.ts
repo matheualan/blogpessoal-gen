@@ -8,19 +8,16 @@ import { AuthModule } from './auth/auth.module';
 import { UsuarioModule } from './user/usuario.module';
 import { Usuario } from './user/entities/usuario.entity';
 import { AppController } from './app.controller';
+import { ConfigModule } from '@nestjs/config';
+import { ProdService } from './data/services/prod.service';
+import { DevService } from './data/services/dev.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql', //nome do banco de dados (image)
-      host: 'localhost', //caminho local da app, localhost para pc individual
-      port: 3306, //porta do banco de dados
-      username: 'root', //login do banco de dados (mariadb)
-      password: 'root', //senha do banco de dados (mariadb)
-      database: 'db_blogpessoal', //nome do database
-      entities: [Postagem, Tema, Usuario], //entidades da api para gerar tabela no db
-      synchronize: true, //sincroniza com o banco de dados
-      // logging: true, //aparece log sql do typeorm no terminal
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRootAsync({
+      useClass: ProdService,
+      imports: [ConfigModule],
     }),
     PostagemModule, //modulos que eu criei
     TemaModule,
@@ -30,4 +27,4 @@ import { AppController } from './app.controller';
   controllers: [AppController],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
