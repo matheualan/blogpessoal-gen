@@ -1,7 +1,7 @@
 import { JwtService } from '@nestjs/jwt';
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { Bcrypt } from '../bcrypt/bcrypt';
-import { UsuarioService } from '../../user/services/usuario.service';
+import { UsuarioService } from '../../usuario/services/usuario.service';
 import { LoginUsuario } from '../entities/loginuser.entity';
 
 
@@ -31,14 +31,14 @@ export class AuthService {
     }
 
     async login(usuarioLogin: LoginUsuario) {
-        const payload = { sub: usuarioLogin.usuario }
+        const payload = { sub: usuarioLogin.email }
 
-        const buscaUsuario = await this.usuarioService.findByUser(usuarioLogin.usuario)
+        const buscaUsuario = await this.usuarioService.findByUser(usuarioLogin.email)
 
         return{
             id: buscaUsuario?.id,
             nome: buscaUsuario?.nome,
-            usuario: usuarioLogin.usuario,
+            usuario: usuarioLogin.email,
             senha: '',
             foto: buscaUsuario?.foto,
             token: `Bearer ${this.jwtService.sign(payload)}`,

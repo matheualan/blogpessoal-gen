@@ -17,7 +17,7 @@ export class PostagemService {
         return await this.postagemRepository.find({
             relations: {
                 tema: true,
-                user: true
+                usuario: true
             }
         });
     }
@@ -29,7 +29,7 @@ export class PostagemService {
             },
             relations: {
                 tema: true,
-                user: true
+                usuario: true
             } 
         });
 
@@ -45,7 +45,7 @@ export class PostagemService {
             },
             relations:{
                 tema: true,
-                user: true
+                usuario: true
             }
         })
     }
