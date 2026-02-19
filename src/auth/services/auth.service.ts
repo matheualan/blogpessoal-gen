@@ -38,7 +38,7 @@ export class AuthService {
         return{
             id: buscaUsuario?.id,
             nome: buscaUsuario?.nome,
-            usuario: usuarioLogin.email,
+            email: usuarioLogin.email, //verificar se alterando aqui para email funcionara
             senha: '',
             foto: buscaUsuario?.foto,
             token: `Bearer ${this.jwtService.sign(payload)}`,
